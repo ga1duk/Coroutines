@@ -32,6 +32,11 @@ data class Author(
     val avatar: String
 )
 
+data class PostWithAuthor(
+    val post: Post,
+    val author: Author
+)
+
 enum class AttachmentType {
     IMAGE
 }
