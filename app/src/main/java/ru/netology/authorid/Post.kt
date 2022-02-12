@@ -32,9 +32,10 @@ data class Author(
     val avatar: String
 )
 
-data class PostWithAuthor(
+data class PostWithAuthorAndComments(
     val post: Post,
-    val author: Author
+    val author: Author,
+    val comments: List<Comment>
 )
 
 enum class AttachmentType {

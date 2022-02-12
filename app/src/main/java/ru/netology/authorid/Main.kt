@@ -26,8 +26,12 @@ fun main() {
             try {
                 val posts = getPosts(client)
                     .map { post ->
-                    PostWithAuthor(post, getPostAuthor(client, post.authorId))
-                }
+                        PostWithAuthorAndComments(
+                            post,
+                            getPostAuthor(client, post.authorId),
+                            getPostComments(client, post.id)
+                        )
+                    }
                 println(posts)
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -73,3 +77,9 @@ suspend fun getPosts(client: OkHttpClient): List<Post> =
 
 suspend fun getPostAuthor(client: OkHttpClient, id: Long): Author =
     makeRequest("$BASE_URL/api/authors/$id", client, object : TypeToken<Author>() {})
+
+suspend fun getPostComments(client: OkHttpClient, postId: Long): List<Comment> =
+    makeRequest(
+        "$BASE_URL/api/posts/$postId/comments",
+        client,
+        object : TypeToken<List<Comment>>() {})
