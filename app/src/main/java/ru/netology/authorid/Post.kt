@@ -26,6 +26,11 @@ data class Comment(
     val likes: Int = 0
 )
 
+data class CommentWithAuthor(
+    val comment: Comment,
+    val commentAuthor: Author
+)
+
 data class Author(
     val id: Long,
     val name: String,
@@ -34,8 +39,8 @@ data class Author(
 
 data class PostWithAuthorAndComments(
     val post: Post,
-    val author: Author,
-    val comments: List<Comment>
+    val postAuthor: Author,
+    val comments: List<CommentWithAuthor>
 )
 
 enum class AttachmentType {

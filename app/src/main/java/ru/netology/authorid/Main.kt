@@ -15,7 +15,7 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 private val gson = Gson()
-private val BASE_URL = "http://localhost:9999"
+private const val BASE_URL = BuildConfig.BASE_URL
 private val client = OkHttpClient.Builder()
     .connectTimeout(30, TimeUnit.SECONDS)
     .build()
@@ -28,8 +28,14 @@ fun main() {
                     .map { post ->
                         PostWithAuthorAndComments(
                             post,
-                            getPostAuthor(client, post.authorId),
+                            getAuthor(client, post.authorId),
                             getPostComments(client, post.id)
+                                .map { comment ->
+                                    CommentWithAuthor(
+                                        comment,
+                                        getAuthor(client, comment.authorId)
+                                    )
+                                }
                         )
                     }
                 println(posts)
@@ -75,7 +81,7 @@ suspend fun <T> makeRequest(url: String, client: OkHttpClient, typeToken: TypeTo
 suspend fun getPosts(client: OkHttpClient): List<Post> =
     makeRequest("$BASE_URL/api/posts", client, object : TypeToken<List<Post>>() {})
 
-suspend fun getPostAuthor(client: OkHttpClient, id: Long): Author =
+suspend fun getAuthor(client: OkHttpClient, id: Long): Author =
     makeRequest("$BASE_URL/api/authors/$id", client, object : TypeToken<Author>() {})
 
 suspend fun getPostComments(client: OkHttpClient, postId: Long): List<Comment> =
