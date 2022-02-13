@@ -38,7 +38,14 @@ fun main() {
                                 }
                         )
                     }
-                println(posts)
+                for (post in posts) {
+                    println(
+                        """${post.post.id}) $post
+                        
+                        
+                    """.trimIndent()
+                    )
+                }
             } catch (e: Exception) {
                 e.printStackTrace()
             }
